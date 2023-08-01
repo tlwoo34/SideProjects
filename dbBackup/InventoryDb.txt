@@ -1,0 +1,625 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 12.8
+-- Dumped by pg_dump version 12.8
+
+-- Started on 2023-07-31 21:51:52
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- TOC entry 203 (class 1259 OID 56434)
+-- Name: inventory; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.inventory (
+    id integer NOT NULL,
+    name character varying(100) NOT NULL,
+    upc bigint NOT NULL,
+    quantity integer NOT NULL
+);
+
+
+ALTER TABLE public.inventory OWNER TO postgres;
+
+--
+-- TOC entry 202 (class 1259 OID 56432)
+-- Name: inventory_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.inventory_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.inventory_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 2886 (class 0 OID 0)
+-- Dependencies: 202
+-- Name: inventory_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.inventory_id_seq OWNED BY public.inventory.id;
+
+
+--
+-- TOC entry 209 (class 1259 OID 56466)
+-- Name: personnel; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.personnel (
+    id integer NOT NULL,
+    name character varying(100) NOT NULL,
+    team_id integer,
+    role_id integer NOT NULL
+);
+
+
+ALTER TABLE public.personnel OWNER TO postgres;
+
+--
+-- TOC entry 208 (class 1259 OID 56464)
+-- Name: personnel_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.personnel_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.personnel_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 2887 (class 0 OID 0)
+-- Dependencies: 208
+-- Name: personnel_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.personnel_id_seq OWNED BY public.personnel.id;
+
+
+--
+-- TOC entry 207 (class 1259 OID 56450)
+-- Name: role; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.role (
+    id integer NOT NULL,
+    name character varying(100) NOT NULL
+);
+
+
+ALTER TABLE public.role OWNER TO postgres;
+
+--
+-- TOC entry 206 (class 1259 OID 56448)
+-- Name: role_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.role_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.role_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 2888 (class 0 OID 0)
+-- Dependencies: 206
+-- Name: role_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.role_id_seq OWNED BY public.role.id;
+
+
+--
+-- TOC entry 213 (class 1259 OID 56514)
+-- Name: role_permissions; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.role_permissions (
+    role_id integer,
+    inventory_id integer
+);
+
+
+ALTER TABLE public.role_permissions OWNER TO postgres;
+
+--
+-- TOC entry 205 (class 1259 OID 56442)
+-- Name: team; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.team (
+    id integer NOT NULL,
+    name character varying(100) NOT NULL
+);
+
+
+ALTER TABLE public.team OWNER TO postgres;
+
+--
+-- TOC entry 204 (class 1259 OID 56440)
+-- Name: team_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.team_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.team_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 2889 (class 0 OID 0)
+-- Dependencies: 204
+-- Name: team_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.team_id_seq OWNED BY public.team.id;
+
+
+--
+-- TOC entry 212 (class 1259 OID 56501)
+-- Name: team_permissions; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.team_permissions (
+    team_id integer,
+    inventory_id integer
+);
+
+
+ALTER TABLE public.team_permissions OWNER TO postgres;
+
+--
+-- TOC entry 211 (class 1259 OID 56484)
+-- Name: transactions; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.transactions (
+    id integer NOT NULL,
+    personnel_id integer,
+    inventory_id integer,
+    quantity integer NOT NULL,
+    "timestamp" timestamp without time zone DEFAULT CURRENT_TIMESTAMP
+);
+
+
+ALTER TABLE public.transactions OWNER TO postgres;
+
+--
+-- TOC entry 210 (class 1259 OID 56482)
+-- Name: transactions_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.transactions_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.transactions_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 2890 (class 0 OID 0)
+-- Dependencies: 210
+-- Name: transactions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.transactions_id_seq OWNED BY public.transactions.id;
+
+
+--
+-- TOC entry 2719 (class 2604 OID 56437)
+-- Name: inventory id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.inventory ALTER COLUMN id SET DEFAULT nextval('public.inventory_id_seq'::regclass);
+
+
+--
+-- TOC entry 2722 (class 2604 OID 56469)
+-- Name: personnel id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.personnel ALTER COLUMN id SET DEFAULT nextval('public.personnel_id_seq'::regclass);
+
+
+--
+-- TOC entry 2721 (class 2604 OID 56453)
+-- Name: role id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.role ALTER COLUMN id SET DEFAULT nextval('public.role_id_seq'::regclass);
+
+
+--
+-- TOC entry 2720 (class 2604 OID 56445)
+-- Name: team id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.team ALTER COLUMN id SET DEFAULT nextval('public.team_id_seq'::regclass);
+
+
+--
+-- TOC entry 2723 (class 2604 OID 56487)
+-- Name: transactions id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.transactions ALTER COLUMN id SET DEFAULT nextval('public.transactions_id_seq'::regclass);
+
+
+--
+-- TOC entry 2870 (class 0 OID 56434)
+-- Dependencies: 203
+-- Data for Name: inventory; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.inventory (id, name, upc, quantity) FROM stdin;
+1	Baseballs	123456789123	250
+2	Basketballs	234567891234	50
+3	Footballs	567891234567	100
+4	T-shirts	682634892168	500
+5	shorts	484913521987	500
+6	shoes	897234891897	500
+7	cleats	981239814687	300
+\.
+
+
+--
+-- TOC entry 2876 (class 0 OID 56466)
+-- Dependencies: 209
+-- Data for Name: personnel; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.personnel (id, name, team_id, role_id) FROM stdin;
+2	Tanner Woodard	\N	1
+3	John Smith	\N	1
+4	Dean Don	\N	1
+5	Frank Tyler	1	3
+6	Cecil Krueger	1	3
+7	Felipe Best	1	2
+8	Norbert Graham	1	2
+9	Bobby Tucker	1	2
+10	Doris Hampton	1	2
+11	Marcellus Hanna	1	2
+12	Donna Barker	1	2
+13	Damon Day	1	2
+14	Henry Oneal	1	2
+15	Gail Snyder	1	2
+16	Rudy Weber	1	2
+17	Rich Medina	1	2
+18	Jose Alvarado	2	2
+19	Cheri Ellis	2	3
+20	Johnathon Lawson	2	2
+21	Robert Sutton	2	2
+22	Earl Dibbles	2	2
+23	Herman Hahn	2	2
+24	Katherine Galloway	2	2
+25	Johanna Patrick	2	2
+26	Stanley Ferrell	2	2
+27	Pearlie Hobbs	2	3
+28	Bryant Graves	2	2
+29	Harvey Mays	2	2
+30	Emmett Donovan	2	2
+31	Patricia Figueroa	2	2
+32	Mickey Mullins	2	2
+33	Dominick Hays	3	3
+34	Ramon Ayers	3	2
+35	Randy Pennington	3	2
+36	Arnulfo Ford	3	3
+37	Heidi Sims	3	2
+38	Emerson Petty	3	2
+39	Kelley Cortez	3	2
+40	Tommie Wheeler	3	2
+41	Elmer Williamson	3	2
+42	Michale Hunt	3	2
+43	Keith Gray	3	2
+44	Luke Rice	3	2
+45	Alvaro Vasquez	3	2
+46	Julian Gay	3	3
+47	Carey Austin	3	2
+48	Opal Hubbard	3	2
+49	Lori Mueller	3	2
+50	Darius Combs	3	2
+51	Garth Brooks	3	2
+52	Saundra Dawson	3	3
+53	Anastasia Salas	3	2
+54	Elijah Barnett	1	4
+55	Betty Morris	1	4
+56	Lauri Brock	1	4
+57	Tony Rivers	1	4
+58	Jillian McCullough	1	4
+59	Bill Valdez	2	4
+60	Judson Rosales	2	4
+61	Cleo Gonzalez	2	4
+62	Kurt Porter	2	4
+63	Maxine Huang	3	4
+64	Myra Murillo	3	4
+65	Everett Kent	3	4
+66	Jacob Lynch	3	4
+67	Nannie Nash	3	4
+68	Ezra McDaniel	3	4
+69	Mindy Patton	3	4
+70	Errol Haney	\N	1
+71	Jaclyn Castaneda	3	4
+72	Olivia Brown	3	4
+73	Saul Walsh	3	4
+74	Steven Jones	3	4
+75	Dan Katz	3	4
+\.
+
+
+--
+-- TOC entry 2874 (class 0 OID 56450)
+-- Dependencies: 207
+-- Data for Name: role; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.role (id, name) FROM stdin;
+1	equipment_staff
+2	player
+3	coach
+4	support_staff
+\.
+
+
+--
+-- TOC entry 2880 (class 0 OID 56514)
+-- Dependencies: 213
+-- Data for Name: role_permissions; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.role_permissions (role_id, inventory_id) FROM stdin;
+\.
+
+
+--
+-- TOC entry 2872 (class 0 OID 56442)
+-- Dependencies: 205
+-- Data for Name: team; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.team (id, name) FROM stdin;
+1	baseball
+2	basketball
+3	football
+4	Soccer
+\.
+
+
+--
+-- TOC entry 2879 (class 0 OID 56501)
+-- Dependencies: 212
+-- Data for Name: team_permissions; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.team_permissions (team_id, inventory_id) FROM stdin;
+1	4
+1	5
+1	6
+1	7
+2	2
+2	4
+2	5
+2	6
+1	1
+\.
+
+
+--
+-- TOC entry 2878 (class 0 OID 56484)
+-- Dependencies: 211
+-- Data for Name: transactions; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.transactions (id, personnel_id, inventory_id, quantity, "timestamp") FROM stdin;
+4	2	2	2	2023-07-17 20:11:52.390509
+5	2	2	2	2023-07-17 20:14:24.365483
+\.
+
+
+--
+-- TOC entry 2891 (class 0 OID 0)
+-- Dependencies: 202
+-- Name: inventory_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.inventory_id_seq', 8, true);
+
+
+--
+-- TOC entry 2892 (class 0 OID 0)
+-- Dependencies: 208
+-- Name: personnel_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.personnel_id_seq', 76, true);
+
+
+--
+-- TOC entry 2893 (class 0 OID 0)
+-- Dependencies: 206
+-- Name: role_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.role_id_seq', 5, true);
+
+
+--
+-- TOC entry 2894 (class 0 OID 0)
+-- Dependencies: 204
+-- Name: team_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.team_id_seq', 5, true);
+
+
+--
+-- TOC entry 2895 (class 0 OID 0)
+-- Dependencies: 210
+-- Name: transactions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.transactions_id_seq', 6, true);
+
+
+--
+-- TOC entry 2726 (class 2606 OID 56439)
+-- Name: inventory pk_inventory; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.inventory
+    ADD CONSTRAINT pk_inventory PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2732 (class 2606 OID 56471)
+-- Name: personnel pk_personnel; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.personnel
+    ADD CONSTRAINT pk_personnel PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2730 (class 2606 OID 56455)
+-- Name: role pk_role; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT pk_role PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2728 (class 2606 OID 56447)
+-- Name: team pk_team; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.team
+    ADD CONSTRAINT pk_team PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2734 (class 2606 OID 56490)
+-- Name: transactions pk_transactions; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.transactions
+    ADD CONSTRAINT pk_transactions PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2736 (class 2606 OID 56477)
+-- Name: personnel personnel_role_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.personnel
+    ADD CONSTRAINT personnel_role_id_fkey FOREIGN KEY (role_id) REFERENCES public.role(id);
+
+
+--
+-- TOC entry 2735 (class 2606 OID 56472)
+-- Name: personnel personnel_team_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.personnel
+    ADD CONSTRAINT personnel_team_id_fkey FOREIGN KEY (team_id) REFERENCES public.team(id);
+
+
+--
+-- TOC entry 2742 (class 2606 OID 56522)
+-- Name: role_permissions role_permissions_inventory_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.role_permissions
+    ADD CONSTRAINT role_permissions_inventory_id_fkey FOREIGN KEY (inventory_id) REFERENCES public.inventory(id);
+
+
+--
+-- TOC entry 2741 (class 2606 OID 56517)
+-- Name: role_permissions role_permissions_role_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.role_permissions
+    ADD CONSTRAINT role_permissions_role_id_fkey FOREIGN KEY (role_id) REFERENCES public.team(id);
+
+
+--
+-- TOC entry 2740 (class 2606 OID 56509)
+-- Name: team_permissions team_permissions_inventory_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.team_permissions
+    ADD CONSTRAINT team_permissions_inventory_id_fkey FOREIGN KEY (inventory_id) REFERENCES public.inventory(id);
+
+
+--
+-- TOC entry 2739 (class 2606 OID 56504)
+-- Name: team_permissions team_permissions_team_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.team_permissions
+    ADD CONSTRAINT team_permissions_team_id_fkey FOREIGN KEY (team_id) REFERENCES public.team(id);
+
+
+--
+-- TOC entry 2738 (class 2606 OID 56496)
+-- Name: transactions transactions_inventory_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.transactions
+    ADD CONSTRAINT transactions_inventory_id_fkey FOREIGN KEY (inventory_id) REFERENCES public.inventory(id);
+
+
+--
+-- TOC entry 2737 (class 2606 OID 56491)
+-- Name: transactions transactions_personnel_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.transactions
+    ADD CONSTRAINT transactions_personnel_id_fkey FOREIGN KEY (personnel_id) REFERENCES public.personnel(id);
+
+
+-- Completed on 2023-07-31 21:51:53
+
+--
+-- PostgreSQL database dump complete
+--
+
